@@ -422,6 +422,9 @@ class Contract(gl.Contract):
     attempt_counts: TreeMap[str, bigint]
     latest_dispute_ids: TreeMap[str, str]
 
+    def __init__(self) -> None:
+        pass
+
     @gl.public.write.payable
     def open_mandate(
         self,

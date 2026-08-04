@@ -21,5 +21,13 @@ def test_contract_header_shape():
     assert lines[2] == "from genlayer import *"
 
 
+def test_contract_defines_empty_constructor_for_studio_schema():
+    source = CONTRACT.read_text(encoding="ascii")
+    assert "class Contract(gl.Contract):" in source
+    assert "    def __init__(self) -> None:" in source
+    assert "self.mandates = TreeMap()" not in source
+    assert "self.disputes = TreeMap()" not in source
+
+
 def test_no_frontend_directory():
     assert not (ROOT / "frontend").exists()
