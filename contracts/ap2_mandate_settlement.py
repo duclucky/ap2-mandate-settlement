@@ -230,6 +230,91 @@ def _parse_json_object(raw) -> dict:
     return parsed
 
 
+def _domain_from_url(value: str) -> str:
+    text = str(value).strip().lower()
+    if text.startswith("https://"):
+        text = text[8:]
+    elif text.startswith("http://"):
+        text = text[7:]
+    slash = text.find("/")
+    if slash >= 0:
+        text = text[:slash]
+    return text
+
+
+def _int_from_any(value) -> int:
+    if isinstance(value, int):
+        return int(value)
+    text = str(value).strip()
+    if _is_digits(text):
+        return int(text)
+    return -1
+
+
+def _derive_ap2_mismatches(
+    body: str,
+    allowed_merchant_domain: str,
+    required_item_id: str,
+    amount: str,
+    currency: str,
+) -> dict:
+    mismatches: list[str] = []
+    fields: list[str] = []
+    try:
+        parsed = json.loads(body)
+        checkout = parsed.get("checkout", {})
+        payment = parsed.get("payment", {})
+        receipts = parsed.get("receipts", {})
+        checkout_merchant = checkout.get("merchant", {})
+        payment_payee = payment.get("payee", {})
+        merchant_domain = _domain_from_url(
+            checkout_merchant.get("website", "") or payment_payee.get("website", "")
+        )
+        if merchant_domain != "" and merchant_domain != allowed_merchant_domain:
+            mismatches.append("MERCHANT_MISMATCH")
+            fields.append("MERCHANT")
+
+        line_items = checkout.get("line_items", [])
+        item_id = ""
+        if isinstance(line_items, list) and len(line_items) > 0:
+            product = line_items[0].get("product", {})
+            item_id = str(product.get("id", ""))
+        if item_id != "" and item_id != required_item_id:
+            mismatches.append("ITEM_MISMATCH")
+            fields.append("ITEM")
+
+        locked_amount = _int_from_any(amount)
+        checkout_amount = _int_from_any(checkout.get("total_price", -1))
+        payment_amount = payment.get("payment_amount", {})
+        paid_amount = _int_from_any(payment_amount.get("amount", -1))
+        observed_amount = checkout_amount if checkout_amount >= paid_amount else paid_amount
+        if locked_amount >= 0 and observed_amount > locked_amount:
+            mismatches.append("AMOUNT_EXCEEDED")
+            fields.append("AMOUNT")
+
+        checkout_currency = str(checkout.get("currency", "")).upper()
+        payment_currency = str(payment_amount.get("currency", "")).upper()
+        if (
+            (checkout_currency != "" and checkout_currency != currency)
+            or (payment_currency != "" and payment_currency != currency)
+        ):
+            mismatches.append("CURRENCY_MISMATCH")
+            fields.append("CURRENCY")
+
+        transaction_id = str(payment.get("transaction_id", ""))
+        checkout_reference = str(receipts.get("checkout_reference", ""))
+        if transaction_id != "" and checkout_reference != "" and transaction_id != checkout_reference:
+            mismatches.append("PAYMENT_REFERENCE_MISMATCH")
+            fields.append("PAYMENT_REFERENCE")
+    except Exception:
+        return {"mismatch_classes": [], "critical_fields": []}
+
+    return {
+        "mismatch_classes": _canonical_allowed(mismatches, MISMATCH_CLASSES, 8),
+        "critical_fields": _canonical_allowed(fields, CRITICAL_FIELDS, 12),
+    }
+
+
 def _canonical_allowed(value, allowed: tuple[str, ...], limit: int) -> list[str]:
     if not isinstance(value, list) or len(value) > limit:
         return []
@@ -261,9 +346,23 @@ def _unverifiable_result(source_stage: str, rationale: str) -> dict:
     }
 
 
-def _normalize_ap2_result(raw, source_stage: str) -> dict:
+def _normalize_ap2_result(raw, source_stage: str, deterministic: dict | None = None) -> dict:
     if source_stage != "SUFFICIENT":
         return _unverifiable_result(source_stage, "AP2 evidence unavailable or outside bounds.")
+    deterministic_mismatches: list[str] = []
+    deterministic_fields: list[str] = []
+    if deterministic is not None:
+        deterministic_mismatches = deterministic.get("mismatch_classes", [])
+        deterministic_fields = deterministic.get("critical_fields", [])
+    if len(deterministic_mismatches) > 0:
+        return {
+            "verdict": "VIOLATION",
+            "source_stage": "SUFFICIENT",
+            "mismatch_classes": deterministic_mismatches,
+            "critical_fields": deterministic_fields,
+            "consequence_class": "REFUND_USER",
+            "rationale": "Deterministic AP2 fields conflict with the locked mandate.",
+        }
     try:
         parsed = _parse_json_object(raw)
     except Exception:
@@ -534,6 +633,13 @@ class Contract(gl.Contract):
                 digest = hashlib.sha256(body.encode("utf-8")).hexdigest()
                 if digest != evidence_digest:
                     return _unverifiable_result("HASH_MISMATCH", "AP2 evidence digest mismatch.")
+                deterministic = _derive_ap2_mismatches(
+                    body,
+                    allowed_merchant_domain,
+                    required_item_id,
+                    amount,
+                    currency,
+                )
             except Exception:
                 return _unverifiable_result("FAILED", "AP2 evidence source unavailable.")
 
@@ -559,7 +665,7 @@ class Contract(gl.Contract):
                 + body
             )
             raw = gl.nondet.exec_prompt(prompt, response_format="json")
-            return _normalize_ap2_result(raw, "SUFFICIENT")
+            return _normalize_ap2_result(raw, "SUFFICIENT", deterministic)
 
         def validator_fn(leader_result) -> bool:
             if not isinstance(leader_result, gl.vm.Return):

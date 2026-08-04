@@ -33,6 +33,13 @@ const TERMINAL_FAILURES = new Set([
   "LEADER_TIMEOUT",
   "VALIDATORS_TIMEOUT",
 ]);
+const CONSENSUS_FAILURE_RESULTS = new Set([
+  "MAJORITY_DISAGREE",
+  "UNDETERMINED",
+  "CANCELED",
+  "LEADER_TIMEOUT",
+  "VALIDATORS_TIMEOUT",
+]);
 
 export function extractExecutionResult(receipt) {
   const normalized = receipt?.execution_result ?? receipt?.executionResult;
@@ -110,6 +117,10 @@ export function inferRawGithubUrl(remoteUrl, commit, fixturePath = PUBLIC_FIXTUR
 }
 
 export function assertSuccessReceipt(receipt) {
+  const consensus = receipt?.result_name ?? receipt?.resultName ?? receipt?.txResultName ?? "";
+  if (CONSENSUS_FAILURE_RESULTS.has(String(consensus))) {
+    throw new Error(`Receipt consensus result is ${consensus}`);
+  }
   const execution = extractExecutionResult(receipt);
   if (execution.result !== "SUCCESS") {
     throw new Error(`Receipt result is ${execution.result}: ${execution.error}`);
@@ -352,6 +363,10 @@ async function waitForReceipt(client, hash) {
 function assertExecution(receipt, operation) {
   if (receipt.networkStatus !== "FINALIZED") {
     throw new Error(`${operation} did not finalize`);
+  }
+  const consensus = receipt?.result_name ?? receipt?.resultName ?? receipt?.txResultName ?? "";
+  if (CONSENSUS_FAILURE_RESULTS.has(String(consensus))) {
+    throw new Error(`${operation} reached consensus result ${consensus}`);
   }
   const execution = executionName(receipt);
   if (execution !== "FINISHED_WITH_RETURN") {

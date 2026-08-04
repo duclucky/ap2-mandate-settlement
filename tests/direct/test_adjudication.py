@@ -160,6 +160,27 @@ def test_violation_verdict_refunds_user(direct_vm, direct_deploy, direct_alice, 
     assert int(contract.get_mandate("ap2-001").escrow_remaining) == 0
 
 
+def test_deterministic_mismatch_overrides_incorrect_authorized_model(
+    direct_vm, direct_deploy, direct_alice, direct_bob
+):
+    contract = setup_dispute_with_body(direct_deploy, direct_vm, direct_alice, direct_bob, VIOLATION_BUNDLE)
+    mock_ap2(direct_vm, adjudication_result(), body=VIOLATION_BUNDLE)
+
+    result = contract.adjudicate_dispute("ap2-001")
+
+    assert result["verdict"] == "VIOLATION"
+    assert result["mismatch_classes"] == [
+        "AMOUNT_EXCEEDED",
+        "ITEM_MISMATCH",
+        "MERCHANT_MISMATCH",
+        "PAYMENT_REFERENCE_MISMATCH",
+    ]
+    assert result["critical_fields"] == ["AMOUNT", "ITEM", "MERCHANT", "PAYMENT_REFERENCE"]
+    assert contract.get_status("ap2-001") == "REFUNDED"
+    assert int(contract.get_credit(to_hex(direct_alice))) == ESCROW + DISPUTE_BOND
+    assert direct_vm.run_validator() is True
+
+
 def test_unavailable_source_is_unverifiable_and_non_penalizing(
     direct_vm, direct_deploy, direct_alice, direct_bob
 ):

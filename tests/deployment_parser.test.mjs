@@ -5,6 +5,7 @@ import {
   discoverEnvPresence,
   extractExecutionResult,
   inferRawGithubUrl,
+  assertSuccessReceipt,
   summarizeReceipt,
 } from "../scripts/deploy_studionet.mjs";
 
@@ -74,6 +75,20 @@ test("summarizeReceipt projects safe allowlisted fields", () => {
       returnData: "0xabc",
     },
   });
+});
+
+test("assertSuccessReceipt rejects finalized majority disagreement", () => {
+  const receipt = {
+    status: 7,
+    statusName: "FINALIZED",
+    result_name: "MAJORITY_DISAGREE",
+    execution_result: { result: "SUCCESS" },
+  };
+
+  assert.throws(
+    () => assertSuccessReceipt(receipt),
+    /MAJORITY_DISAGREE/
+  );
 });
 
 test("discoverEnvPresence recognizes workspace Studionet key names without exposing values", () => {
