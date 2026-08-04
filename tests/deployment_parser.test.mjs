@@ -79,11 +79,12 @@ test("summarizeReceipt projects safe allowlisted fields", () => {
 test("discoverEnvPresence recognizes workspace Studionet key names without exposing values", () => {
   const presence = discoverEnvPresence(
     "STUDIONET_PRIVATE_KEY=dummy-primary\n",
-    "STUDIONET_INTEGRATOR_PRIVATE_KEY=dummy-merchant\n"
+    "STUDIONET_INTEGRATOR_PRIVATE_KEY=dummy-merchant\nSTUDIONET_RPC_URL=https://rpc.example\n"
   );
 
   assert.equal(presence.hasPrimaryPrivateKey, true);
   assert.equal(presence.hasMerchantPrivateKey, true);
+  assert.equal(presence.hasCustomRpcUrl, true);
   assert.deepEqual(presence.checkedPrimaryVariables, [
     "GENLAYER_PRIVATE_KEY",
     "STUDIONET_PRIVATE_KEY",

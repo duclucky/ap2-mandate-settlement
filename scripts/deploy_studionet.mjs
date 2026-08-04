@@ -23,7 +23,7 @@ const EVIDENCE_PATH = path.resolve("docs", "evidence", "studionet", "deployment.
 const PUBLIC_FIXTURE_PATH = "docs/evidence/public-fixtures/ap2-violation.json";
 const AP2_SPEC_URL = "https://raw.githubusercontent.com/google-agentic-commerce/AP2/main/docs/ap2/specification.md";
 const EXPLORER_URL = "https://explorer-studio.genlayer.com";
-const RPC_URL = studionet.rpcUrls.default.http[0];
+const DEFAULT_RPC_URL = studionet.rpcUrls.default.http[0];
 const MANDATE_ID = "ap2-001";
 const ESCROW_WEI = 10_000_000_000_000_000n;
 const DISPUTE_BOND_WEI = 1_000_000_000_000_000n;
@@ -92,6 +92,7 @@ export function discoverEnvPresence(projectEnv = "", parentEnv = "") {
   return {
     hasPrimaryPrivateKey: PRIMARY_KEY_VARIABLES.some((name) => Boolean(merged[name])),
     hasMerchantPrivateKey: MERCHANT_KEY_VARIABLES.some((name) => Boolean(merged[name])),
+    hasCustomRpcUrl: Boolean(merged.STUDIONET_RPC_URL || merged.GENLAYER_RPC_URL),
     checkedPrimaryVariables: [...PRIMARY_KEY_VARIABLES],
     checkedMerchantVariables: [...MERCHANT_KEY_VARIABLES],
   };
@@ -277,11 +278,15 @@ function loadAccounts() {
 }
 
 function signingClient(account) {
-  return createClient({ chain: studionet, endpoint: RPC_URL, account });
+  return createClient({ chain: studionet, endpoint: rpcUrl(), account });
 }
 
 function publicClient() {
-  return createClient({ chain: studionet, endpoint: RPC_URL });
+  return createClient({ chain: studionet, endpoint: rpcUrl() });
+}
+
+function rpcUrl() {
+  return process.env.STUDIONET_RPC_URL?.trim() || process.env.GENLAYER_RPC_URL?.trim() || DEFAULT_RPC_URL;
 }
 
 async function assertStudionet(client) {
@@ -593,6 +598,7 @@ async function main() {
       envFilesChecked: envFiles.length,
       hasPrimaryPrivateKey: presence.hasPrimaryPrivateKey,
       hasMerchantPrivateKey: presence.hasMerchantPrivateKey,
+      hasCustomRpcUrl: presence.hasCustomRpcUrl,
       sourceCommit: currentCommit(),
       deploymentPath: path.relative(process.cwd(), EVIDENCE_PATH),
     };

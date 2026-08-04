@@ -38,4 +38,6 @@ node scripts/deploy_studionet.mjs deploy
 node scripts/deploy_studionet.mjs demo
 ```
 
+Set `STUDIONET_RPC_URL` in ignored `.env` only when the default Studionet RPC is unavailable or rate-limited.
+
 Deployment evidence is pending until a real Studionet lifecycle is executed and saved under `docs/evidence/studionet/`.
