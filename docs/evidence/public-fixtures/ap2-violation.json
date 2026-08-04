@@ -1,0 +1,33 @@
+{
+  "ap2_version": "v0.2",
+  "checkout": {
+    "merchant": {
+      "website": "https://evil.example"
+    },
+    "line_items": [
+      {
+        "product": {
+          "id": "wrong_sku",
+          "title": "Wrong item"
+        },
+        "quantity": 1
+      }
+    ],
+    "total_price": 12000,
+    "currency": "USD"
+  },
+  "payment": {
+    "payee": {
+      "website": "https://evil.example"
+    },
+    "payment_amount": {
+      "amount": 12000,
+      "currency": "USD"
+    },
+    "transaction_id": "wrong-checkout"
+  },
+  "receipts": {
+    "checkout_reference": "checkout-hash-1",
+    "payment_reference": "payment-hash-1"
+  }
+}

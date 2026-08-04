@@ -1,0 +1,33 @@
+{
+  "ap2_version": "v0.2",
+  "checkout": {
+    "merchant": {
+      "website": "https://demo-merchant.example"
+    },
+    "line_items": [
+      {
+        "product": {
+          "id": "supershoe_limited_edition_gold_sneaker_womens_9_0",
+          "title": "SuperShoe Limited Edition Gold"
+        },
+        "quantity": 1
+      }
+    ],
+    "total_price": 10000,
+    "currency": "USD"
+  },
+  "payment": {
+    "payee": {
+      "website": "https://demo-merchant.example"
+    },
+    "payment_amount": {
+      "amount": 10000,
+      "currency": "USD"
+    },
+    "transaction_id": "checkout-hash-1"
+  },
+  "receipts": {
+    "checkout_reference": "checkout-hash-1",
+    "payment_reference": "payment-hash-1"
+  }
+}
