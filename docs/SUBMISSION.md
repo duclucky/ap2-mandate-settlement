@@ -15,22 +15,22 @@ https://github.com/duclucky/ap2-mandate-settlement
 ## Primary Contract
 
 - Network: studionet
-- Address: `0xD5c88F2e88CEF57A19945c40a64c74F7f3e1093F`
-- Explorer: https://explorer-studio.genlayer.com/address/0xD5c88F2e88CEF57A19945c40a64c74F7f3e1093F
-- Source commit: `b7c9eb0d9c83f0f4114b1066933cc27fba5b3d2e`
+- Address: `0xb5b7e9bb4f72F756E98ee3ecA4B121F15262D5F1`
+- Explorer: https://explorer-studio.genlayer.com/address/0xb5b7e9bb4f72F756E98ee3ecA4B121F15262D5F1
+- Source commit: `56a8c571c68602325952096cfef439ed22a60f98`
 
 ## Evidence
 
 - Lifecycle evidence: `docs/evidence/studionet/deployment.json`
 - Public dispute bundle: `docs/evidence/public-fixtures/ap2-violation.json`
 - Superseded diagnostic archive: `docs/evidence/studionet/archive/`
-- CI: https://github.com/duclucky/ap2-mandate-settlement/actions/runs/30897238608
+- CI: https://github.com/duclucky/ap2-mandate-settlement/actions/runs/30898140066
 
 ## Counts
 
 - Contracts: 1
 - Frontend: 0
-- Direct tests: 39
+- Direct tests: 40
 - Deployment parser tests: 7
 
 ## Description

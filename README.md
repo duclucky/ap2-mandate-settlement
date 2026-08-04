@@ -30,7 +30,7 @@ npm run check
 
 Network: `studionet`.
 
-Active contract: `0xD5c88F2e88CEF57A19945c40a64c74F7f3e1093F`.
+Active contract: `0xb5b7e9bb4f72F756E98ee3ecA4B121F15262D5F1`.
 
 The demo dispute evidence is stored under `docs/evidence/public-fixtures/` and must be reachable through a commit-pinned raw GitHub URL before the live dispute is opened.
 

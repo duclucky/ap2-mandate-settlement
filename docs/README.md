@@ -277,8 +277,8 @@ Rationale is capped and stored for explanation only. It is not consensus-critica
 ## Deployment And Evidence Plan
 
 - Network: studionet.
-- Active contract: `0xD5c88F2e88CEF57A19945c40a64c74F7f3e1093F`.
-- Source commit: `b7c9eb0d9c83f0f4114b1066933cc27fba5b3d2e`.
+- Active contract: `0xb5b7e9bb4f72F756E98ee3ecA4B121F15262D5F1`.
+- Source commit: `56a8c571c68602325952096cfef439ed22a60f98`.
 - Actors/wallet separation: user and merchant as separate public addresses; if a second EOA is required, ask before creating/funding it.
 - Deploy steps: local check, deploy contract, verify `Result: SUCCESS`, save address/tx/source commit.
 - Consequential lifecycle: open mandate with GEN escrow, accept, open dispute with bond, adjudicate `VIOLATION` or `AUTHORIZED`, withdraw credit.

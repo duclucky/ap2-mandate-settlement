@@ -1,49 +1,49 @@
 {
   "network": "studionet",
-  "sourceCommit": "56a8c571c68602325952096cfef439ed22a60f98",
-  "contractAddress": "0xb5b7e9bb4f72F756E98ee3ecA4B121F15262D5F1",
-  "transactionHash": "0x13665a92756924d88aa6588879b303e91617991b85cd7b34db78865c3c766fb1",
+  "sourceCommit": "b7c9eb0d9c83f0f4114b1066933cc27fba5b3d2e",
+  "contractAddress": "0xD5c88F2e88CEF57A19945c40a64c74F7f3e1093F",
+  "transactionHash": "0x3dbcc5630ff3107b07ebd4b30a077f4905a26bfb836e3fbe6b7c657b8bb6dc7a",
   "result": "SUCCESS",
-  "timestamp": "2026-08-04T09:52:43.143Z",
+  "timestamp": "2026-08-04T09:30:34.440Z",
   "actorRoles": {
     "user": "0xC495ef51618D03267A1f227aFe5b27B38c748272",
     "merchant": "0x45aD397c438397A702B53a7499a78D08961D39Db"
   },
   "mandateId": "ap2-001",
   "disputeEvidence": {
-    "url": "https://raw.githubusercontent.com/duclucky/ap2-mandate-settlement/56a8c571c68602325952096cfef439ed22a60f98/docs/evidence/public-fixtures/ap2-violation.json",
+    "url": "https://raw.githubusercontent.com/duclucky/ap2-mandate-settlement/b7c9eb0d9c83f0f4114b1066933cc27fba5b3d2e/docs/evidence/public-fixtures/ap2-violation.json",
     "sha256": "d8677f5899b459921f40c3e2651994f770bc83c3aebfdc7a9d012be4f283c8ab"
   },
   "transactions": {
     "openMandate": {
-      "transactionHash": "0x11641d972c47e0fd1dbd395142653c24e042c9de55eb6a20665ccc640e6ef700",
+      "transactionHash": "0x0697c670c16a17deaed6c0eeafa99f72590adc800a2e828b220db67360f3b2ea",
       "status": "FINALIZED",
       "execution": "FINISHED_WITH_RETURN",
-      "finalizedAt": "2026-08-04T09:53:51.973Z"
+      "finalizedAt": "2026-08-04T09:32:54.104Z"
     },
     "acceptMandate": {
-      "transactionHash": "0x62e78d18bcc8043c5820fb245ef378b7beea2919e31899f7c34f4b6eb1d190e2",
+      "transactionHash": "0xa6ae7af00cc03abe4a1ed4da9235a5dd0c4e12809fb0d45454e8650c5baf71db",
       "status": "FINALIZED",
       "execution": "FINISHED_WITH_RETURN",
-      "finalizedAt": "2026-08-04T09:54:33.785Z"
+      "finalizedAt": "2026-08-04T09:32:55.029Z"
     },
     "openDispute": {
-      "transactionHash": "0x9e68f1cd42b90278c046bc5c1f8bc2f4df759b77939445af67a174cda9a25273",
+      "transactionHash": "0xbdb7a39eb7cae8f2f1537d867201bbee38fdf28af5fce2ebfc81775a13b1ad2b",
       "status": "FINALIZED",
       "execution": "FINISHED_WITH_RETURN",
-      "finalizedAt": "2026-08-04T09:55:16.042Z"
+      "finalizedAt": "2026-08-04T09:32:55.946Z"
     },
     "adjudicateDispute": {
-      "transactionHash": "0x0a2a118f042453af66a3feaaf89124fa26839e81be79f66caf655d0a7d85f4c4",
+      "transactionHash": "0x20226f5e0cb52c5c39df9a41c1faf734ee79f42b22b790a52aa59049a82a1f4a",
       "status": "FINALIZED",
       "execution": "FINISHED_WITH_RETURN",
-      "finalizedAt": "2026-08-04T09:56:05.102Z"
+      "finalizedAt": "2026-08-04T09:34:01.499Z"
     },
     "withdrawUserCredit": {
-      "transactionHash": "0x1ff5fc8b68522df0dd106ac8556f15ec79ebba59095fd813f4babe6e13a5e74e",
+      "transactionHash": "0xae64bc4875a1b5ca41bdad45ac84e3b3e12ec4e7540018d4485d2c308d5ad72e",
       "status": "FINALIZED",
       "execution": "FINISHED_WITH_RETURN",
-      "finalizedAt": "2026-08-04T09:56:50.328Z"
+      "finalizedAt": "2026-08-04T09:34:44.832Z"
     }
   },
   "canonicalReads": {
@@ -71,7 +71,7 @@
       "consequence_class": "REFUND_USER",
       "critical_fields": "ITEM,MERCHANT,PAYMENT_REFERENCE",
       "evidence_digest": "d8677f5899b459921f40c3e2651994f770bc83c3aebfdc7a9d012be4f283c8ab",
-      "evidence_url": "https://raw.githubusercontent.com/duclucky/ap2-mandate-settlement/56a8c571c68602325952096cfef439ed22a60f98/docs/evidence/public-fixtures/ap2-violation.json",
+      "evidence_url": "https://raw.githubusercontent.com/duclucky/ap2-mandate-settlement/b7c9eb0d9c83f0f4114b1066933cc27fba5b3d2e/docs/evidence/public-fixtures/ap2-violation.json",
       "mandate_id": "ap2-001",
       "mismatch_classes": "ITEM_MISMATCH,MERCHANT_MISMATCH,PAYMENT_REFERENCE_MISMATCH",
       "rationale": "Deterministic AP2 fields conflict with the locked mandate.",
@@ -94,5 +94,6 @@
     "contractOnlyTrack": true,
     "evidenceIsSanitized": true,
     "parserDoesNotPersistRawReceipts": true
-  }
+  },
+  "archivedReason": "Source commit changed before redeploy"
 }
