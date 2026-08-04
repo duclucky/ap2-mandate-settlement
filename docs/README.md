@@ -46,7 +46,7 @@ Settle agentic-payment disputes by paying the merchant only when AP2 evidence me
 | Differentiation | PASS | Different from registered SEC/FDA/recall/interface/access/deliverable ideas on evidence, consensus question, and consequence. |
 | Claim-to-code | PASS | Claims map below to methods, views, tests, and Studionet evidence. |
 | Full lifecycle | PASS | Lifecycle evidence covers fund, accept, dispute, adjudicate, withdraw, and canonical reads. |
-| Scope honesty | PASS | CI and portal submission stay pending until proven. |
+| Scope honesty | PASS | Portal submission stays pending until explicit authorization. |
 
 ## Actors, Roles And Incentives
 
@@ -310,7 +310,7 @@ Not selected.
 - No frontend or browser-wallet evidence by design.
 - No legal/card-network claim.
 - No full SD-JWT cryptographic verification library in GenVM; evidence authenticity for contract consequences is bounded by mandate-party authorization, commit-pinned source URL, and SHA-256 digest, while AP2 signature semantics are part of validator judgment.
-- CI and portal submission remain pending until proven.
+- Portal submission remains pending until explicit action-time authorization.
 
 ## Kill Criteria
 

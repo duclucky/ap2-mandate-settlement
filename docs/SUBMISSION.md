@@ -24,6 +24,7 @@ https://github.com/duclucky/ap2-mandate-settlement
 - Lifecycle evidence: `docs/evidence/studionet/deployment.json`
 - Public dispute bundle: `docs/evidence/public-fixtures/ap2-violation.json`
 - Superseded diagnostic archive: `docs/evidence/studionet/archive/`
+- CI: https://github.com/duclucky/ap2-mandate-settlement/actions/runs/30897238608
 
 ## Counts
 
@@ -40,4 +41,4 @@ AP2 Mandate Settlement Bond is a reusable GenLayer Intelligent Contract for agen
 
 - No frontend or browser-wallet evidence by design.
 - No full SD-JWT cryptographic verification library in GenVM; AP2 signature semantics are bounded validator judgment in v1.
-- CI link is pending; do not submit until CI is available or the portal accepts local plus Studionet evidence.
+- Portal submission is not submitted yet; final Submit still requires explicit action-time authorization.

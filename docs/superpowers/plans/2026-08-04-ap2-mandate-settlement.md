@@ -106,7 +106,7 @@
 - [x] Execute one consequential lifecycle and canonical reads; save only allowlisted evidence.
 - [x] Run public hygiene audit: `git rev-parse --show-toplevel`, `git status --short`, `git diff --check`, staged file list, `git ls-files`, secret/path scan.
 - [x] Make meaningful commits, create/push public GitHub repo, verify URL.
-- [ ] Draft portal Title, Description under 1000 chars, and Evidence URL.
+- [x] Draft portal Title, Description under 1000 chars, and Evidence URL.
 
 ## Self-Review
 
