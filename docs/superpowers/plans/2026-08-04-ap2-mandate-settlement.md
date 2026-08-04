@@ -101,11 +101,11 @@
 - Consumes tested contract and deployment script.
 - Produces verified Studionet address, public repo URL, and copy-ready portal text.
 
-- [ ] Safely discover project `.env`, then parent `.env`, checking only presence.
-- [ ] Deploy to Studionet using the authorized wallet; verify `Result: SUCCESS`.
-- [ ] Execute one consequential lifecycle and canonical reads; save only allowlisted evidence.
-- [ ] Run public hygiene audit: `git rev-parse --show-toplevel`, `git status --short`, `git diff --check`, staged file list, `git ls-files`, secret/path scan.
-- [ ] Make meaningful commits, create/push public GitHub repo, verify URL.
+- [x] Safely discover project `.env`, then parent `.env`, checking only presence.
+- [x] Deploy to Studionet using the authorized wallet; verify `Result: SUCCESS`.
+- [x] Execute one consequential lifecycle and canonical reads; save only allowlisted evidence.
+- [x] Run public hygiene audit: `git rev-parse --show-toplevel`, `git status --short`, `git diff --check`, staged file list, `git ls-files`, secret/path scan.
+- [x] Make meaningful commits, create/push public GitHub repo, verify URL.
 - [ ] Draft portal Title, Description under 1000 chars, and Evidence URL.
 
 ## Self-Review

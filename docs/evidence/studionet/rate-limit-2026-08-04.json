@@ -1,0 +1,20 @@
+{
+  "network": "studionet",
+  "sourceCommit": "dbd380510255c2a6767cb974dce7b747a085b66e",
+  "status": "SUPERSEDED_DIAGNOSTIC",
+  "blockedAt": "2026-08-04T09:22:00.000Z",
+  "safeErrorSummary": "Default Studionet RPC returned rate limit exceeded while polling adjudicateDispute transaction finality.",
+  "finalDiagnosis": "After polling resumed, the adjudicateDispute transaction finalized with top-level resultName MAJORITY_DISAGREE and no settlement state transition. The active revision b7c9eb0d9c83f0f4114b1066933cc27fba5b3d2e derives AP2 mismatch fields deterministically and rejects MAJORITY_DISAGREE in the deployment parser.",
+  "confirmedBeforeBlocker": [
+    "deploy",
+    "openMandate",
+    "acceptMandate",
+    "openDispute"
+  ],
+  "pendingTransaction": {
+    "name": "adjudicateDispute",
+    "transactionHash": "0x10382c85d38d1e8dbafce1826e6db0922054e6c48d5ccbb7dae91b4df043bef8"
+  },
+  "supersededBySourceCommit": "b7c9eb0d9c83f0f4114b1066933cc27fba5b3d2e",
+  "nextAction": "Use docs/evidence/studionet/deployment.json as the active successful lifecycle evidence."
+}

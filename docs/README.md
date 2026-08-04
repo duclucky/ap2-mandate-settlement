@@ -6,8 +6,8 @@
 - Project name: AP2 Mandate Settlement Bond
 - Project slug: `ap2-mandate-settlement`
 - Category: Intelligent Contracts
-- Status: BUILDING
-- Repository: `PENDING_PUBLIC_REPO`
+- Status: DEPLOYED_STUDIONET_LIFECYCLE_VERIFIED
+- Repository: `https://github.com/duclucky/ap2-mandate-settlement`
 - Target network: studionet
 
 ## One-Sentence Product Hook
@@ -44,9 +44,9 @@ Settle agentic-payment disputes by paying the merchant only when AP2 evidence me
 | Reuse | PASS | Consumers integrate with documented writes/views and do not need a frontend or second contract. |
 | Contract count | PASS | One contract owns escrow, evidence policy, verdict, and credits; no independent consumer boundary exists. |
 | Differentiation | PASS | Different from registered SEC/FDA/recall/interface/access/deliverable ideas on evidence, consensus question, and consequence. |
-| Claim-to-code | PASS | Claims map below to methods, views, tests, and planned Studionet evidence. |
-| Full lifecycle | PASS | Planned lifecycle covers fund, accept, dispute, adjudicate, withdraw, and canonical reads. |
-| Scope honesty | PASS | Deployment, GitHub, CI, and portal submission stay pending until proven. |
+| Claim-to-code | PASS | Claims map below to methods, views, tests, and Studionet evidence. |
+| Full lifecycle | PASS | Lifecycle evidence covers fund, accept, dispute, adjudicate, withdraw, and canonical reads. |
+| Scope honesty | PASS | CI and portal submission stay pending until proven. |
 
 ## Actors, Roles And Incentives
 
@@ -277,6 +277,8 @@ Rationale is capped and stored for explanation only. It is not consensus-critica
 ## Deployment And Evidence Plan
 
 - Network: studionet.
+- Active contract: `0xD5c88F2e88CEF57A19945c40a64c74F7f3e1093F`.
+- Source commit: `b7c9eb0d9c83f0f4114b1066933cc27fba5b3d2e`.
 - Actors/wallet separation: user and merchant as separate public addresses; if a second EOA is required, ask before creating/funding it.
 - Deploy steps: local check, deploy contract, verify `Result: SUCCESS`, save address/tx/source commit.
 - Consequential lifecycle: open mandate with GEN escrow, accept, open dispute with bond, adjudicate `VIOLATION` or `AUTHORIZED`, withdraw credit.
@@ -285,18 +287,19 @@ Rationale is capped and stored for explanation only. It is not consensus-critica
 - Public dispute fixture path: `docs/evidence/public-fixtures/ap2-violation.json`, served through a raw GitHub URL pinned to the source commit.
 - Evidence path: `docs/evidence/studionet/`.
 - Resume/idempotency: deployment script reuses same-commit deployment evidence, archives superseded deployment evidence, and records submitted transactions so retries do not intentionally resubmit completed steps.
+- Superseded revision: `dbd380510255c2a6767cb974dce7b747a085b66e` archived after `MAJORITY_DISAGREE` left adjudication pending.
 
 ## Definition Of Done
 
 ### Intelligent Contracts
 
-- [ ] Reusable primitive.
-- [ ] Semantic validator judgment.
-- [ ] Direct consequence.
-- [ ] Reuse proof through documented views.
-- [ ] Adversarial tests.
-- [ ] Real network lifecycle.
-- [ ] Canonical evidence.
+- [x] Reusable primitive.
+- [x] Semantic validator judgment.
+- [x] Direct consequence.
+- [x] Reuse proof through documented views.
+- [x] Adversarial tests.
+- [x] Real network lifecycle.
+- [x] Canonical evidence.
 
 ### Projects, If Selected
 
@@ -307,7 +310,7 @@ Not selected.
 - No frontend or browser-wallet evidence by design.
 - No legal/card-network claim.
 - No full SD-JWT cryptographic verification library in GenVM; evidence authenticity for contract consequences is bounded by mandate-party authorization, commit-pinned source URL, and SHA-256 digest, while AP2 signature semantics are part of validator judgment.
-- Deployment, public GitHub, CI, and portal submission remain pending until proven.
+- CI and portal submission remain pending until proven.
 
 ## Kill Criteria
 

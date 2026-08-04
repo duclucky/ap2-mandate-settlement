@@ -30,6 +30,8 @@ npm run check
 
 Network: `studionet`.
 
+Active contract: `0xD5c88F2e88CEF57A19945c40a64c74F7f3e1093F`.
+
 The demo dispute evidence is stored under `docs/evidence/public-fixtures/` and must be reachable through a commit-pinned raw GitHub URL before the live dispute is opened.
 
 ```powershell
@@ -40,4 +42,4 @@ node scripts/deploy_studionet.mjs demo
 
 Set `STUDIONET_RPC_URL` in ignored `.env` only when the default Studionet RPC is unavailable or rate-limited.
 
-Deployment evidence is pending until a real Studionet lifecycle is executed and saved under `docs/evidence/studionet/`.
+Deployment and lifecycle evidence are saved under `docs/evidence/studionet/deployment.json`.
