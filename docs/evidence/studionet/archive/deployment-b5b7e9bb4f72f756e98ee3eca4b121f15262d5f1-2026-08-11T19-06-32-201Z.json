@@ -1,0 +1,99 @@
+{
+  "network": "studionet",
+  "sourceCommit": "56a8c571c68602325952096cfef439ed22a60f98",
+  "contractAddress": "0xb5b7e9bb4f72F756E98ee3ecA4B121F15262D5F1",
+  "transactionHash": "0x13665a92756924d88aa6588879b303e91617991b85cd7b34db78865c3c766fb1",
+  "result": "SUCCESS",
+  "timestamp": "2026-08-04T09:52:43.143Z",
+  "actorRoles": {
+    "user": "0xC495ef51618D03267A1f227aFe5b27B38c748272",
+    "merchant": "0x45aD397c438397A702B53a7499a78D08961D39Db"
+  },
+  "mandateId": "ap2-001",
+  "disputeEvidence": {
+    "url": "https://raw.githubusercontent.com/duclucky/ap2-mandate-settlement/56a8c571c68602325952096cfef439ed22a60f98/docs/evidence/public-fixtures/ap2-violation.json",
+    "sha256": "d8677f5899b459921f40c3e2651994f770bc83c3aebfdc7a9d012be4f283c8ab"
+  },
+  "transactions": {
+    "openMandate": {
+      "transactionHash": "0x11641d972c47e0fd1dbd395142653c24e042c9de55eb6a20665ccc640e6ef700",
+      "status": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN",
+      "finalizedAt": "2026-08-04T09:53:51.973Z"
+    },
+    "acceptMandate": {
+      "transactionHash": "0x62e78d18bcc8043c5820fb245ef378b7beea2919e31899f7c34f4b6eb1d190e2",
+      "status": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN",
+      "finalizedAt": "2026-08-04T09:54:33.785Z"
+    },
+    "openDispute": {
+      "transactionHash": "0x9e68f1cd42b90278c046bc5c1f8bc2f4df759b77939445af67a174cda9a25273",
+      "status": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN",
+      "finalizedAt": "2026-08-04T09:55:16.042Z"
+    },
+    "adjudicateDispute": {
+      "transactionHash": "0x0a2a118f042453af66a3feaaf89124fa26839e81be79f66caf655d0a7d85f4c4",
+      "status": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN",
+      "finalizedAt": "2026-08-04T09:56:05.102Z"
+    },
+    "withdrawUserCredit": {
+      "transactionHash": "0x1ff5fc8b68522df0dd106ac8556f15ec79ebba59095fd813f4babe6e13a5e74e",
+      "status": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN",
+      "finalizedAt": "2026-08-04T09:56:50.328Z"
+    }
+  },
+  "canonicalReads": {
+    "status": "REFUNDED",
+    "mandate": {
+      "accepted": true,
+      "activation_date": "2026-01-01",
+      "active_dispute_id": "ap2-001:1",
+      "allowed_merchant_domain": "demo-merchant.example",
+      "amount": "10000000000000000",
+      "ap2_spec_hash": "32c3be5011f481d2760e56e7b9935b0842c3da0d5f7d7b8a68402a599f1e6aa3",
+      "ap2_spec_url": "https://raw.githubusercontent.com/google-agentic-commerce/AP2/main/docs/ap2/specification.md",
+      "close_proposed_by": "0x0000000000000000000000000000000000000000",
+      "currency": "USD",
+      "dispute_bond_amount": 1000000000000000,
+      "escrow_remaining": 0,
+      "expiry_date": "2026-12-31",
+      "merchant": "0x45ad397c438397a702b53a7499a78d08961d39db",
+      "required_item_id": "supershoe_limited_edition_gold_sneaker_womens_9_0",
+      "status": "REFUNDED",
+      "user": "0xc495ef51618d03267a1f227afe5b27b38c748272"
+    },
+    "dispute": {
+      "claimant": "0xc495ef51618d03267a1f227afe5b27b38c748272",
+      "consequence_class": "REFUND_USER",
+      "critical_fields": "ITEM,MERCHANT,PAYMENT_REFERENCE",
+      "evidence_digest": "d8677f5899b459921f40c3e2651994f770bc83c3aebfdc7a9d012be4f283c8ab",
+      "evidence_url": "https://raw.githubusercontent.com/duclucky/ap2-mandate-settlement/56a8c571c68602325952096cfef439ed22a60f98/docs/evidence/public-fixtures/ap2-violation.json",
+      "mandate_id": "ap2-001",
+      "mismatch_classes": "ITEM_MISMATCH,MERCHANT_MISMATCH,PAYMENT_REFERENCE_MISMATCH",
+      "rationale": "Deterministic AP2 fields conflict with the locked mandate.",
+      "settled": true,
+      "source_stage": "SUFFICIENT",
+      "status": "RESOLVED",
+      "verdict": "VIOLATION"
+    },
+    "userCreditBeforeWithdraw": "11000000000000000",
+    "userCreditAfterWithdraw": 0,
+    "merchantCredit": 0,
+    "accounting": {
+      "locked_dispute_bonds": 0,
+      "locked_escrow": 0,
+      "withdrawable_credits": 0
+    }
+  },
+  "limits": {
+    "noFrontend": true,
+    "contractOnlyTrack": true,
+    "evidenceIsSanitized": true,
+    "parserDoesNotPersistRawReceipts": true
+  },
+  "archivedReason": "Source commit changed before redeploy"
+}

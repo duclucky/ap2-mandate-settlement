@@ -6,7 +6,7 @@
 - Project name: AP2 Mandate Settlement Bond
 - Project slug: `ap2-mandate-settlement`
 - Category: Intelligent Contracts
-- Status: EVIDENCE_AUTHENTICITY_REMEDIATED_LOCAL
+- Status: V2_DEPLOYED_LIFECYCLE_PARTIAL
 - Repository: `https://github.com/duclucky/ap2-mandate-settlement`
 - Target network: studionet
 
@@ -46,7 +46,7 @@ Settle agentic-payment disputes by paying the merchant only when AP2 evidence me
 | Contract count | PASS | One contract owns escrow, evidence policy, verdict, and credits; no independent consumer boundary exists. |
 | Differentiation | PASS | Different from registered SEC/FDA/recall/interface/access/deliverable ideas on evidence, consensus question, and consequence. |
 | Claim-to-code | PASS | Claims map below to methods, views, tests, and Studionet evidence. |
-| Full lifecycle | PASS | Lifecycle evidence covers fund, accept, dispute, adjudicate, withdraw, and canonical reads. |
+| Full lifecycle | PENDING - v2 network retry needed | v2 deploy, open mandate, accept, and open dispute finalized; adjudication was submitted but finality/canonical settlement reads are pending after default Studionet RPC rate limit. |
 | Scope honesty | PASS | Portal submission stays pending until explicit authorization. |
 
 ## Actors, Roles And Incentives
@@ -285,7 +285,9 @@ Rationale is capped and stored for explanation only. It is not consensus-critica
 
 - Network: studionet.
 - Last v1 Studionet contract: `0xb5b7e9bb4f72F756E98ee3ecA4B121F15262D5F1`.
-- v2 source commit: pending after authenticity remediation.
+- v2 Studionet contract: `0xf95Dd8ff9849016A6d6EED976343b3d0FDD202AD`.
+- v2 source commit: `9ce0a67c2d57b886f7978949dfdace851af074fe`.
+- v2 lifecycle status: deploy, `open_mandate`, `accept_mandate`, and `open_dispute` finalized; `adjudicate_dispute` submitted as `0x687ebe73adc7810538614344fe9656254ec879bdfb234cb2ac000a5f4a4dc726`, with finality/canonical reads pending after default Studionet RPC rate limit.
 - Actors/wallet separation: user and merchant as separate public addresses; if a second EOA is required, ask before creating/funding it.
 - Deploy steps: local check, deploy contract, verify `Result: SUCCESS`, save address/tx/source commit.
 - Consequential lifecycle: open mandate with GEN escrow and locked issuer id/key, accept, open dispute with signed evidence envelope and bond, adjudicate `VIOLATION` or `AUTHORIZED`, withdraw credit.
@@ -305,8 +307,8 @@ Rationale is capped and stored for explanation only. It is not consensus-critica
 - [x] Direct consequence.
 - [x] Reuse proof through documented views.
 - [x] Adversarial tests.
-- [x] Real network lifecycle.
-- [x] Canonical evidence.
+- [ ] Real network lifecycle final adjudication and withdrawal.
+- [ ] Canonical settlement evidence.
 
 ### Projects, If Selected
 
@@ -317,6 +319,7 @@ Not selected.
 - No frontend or browser-wallet evidence by design.
 - No legal/card-network claim.
 - Full AP2 SD-JWT/JWS verification remains a future milestone. This remediation implements deterministic Ed25519 verification of issuer-signed AP2 evidence envelopes before checkout/payment/receipt facts can drive settlement.
+- v2 final adjudication receipt and canonical settlement reads are pending after default Studionet RPC rate limit.
 - Portal submission remains pending until explicit action-time authorization.
 
 ## Kill Criteria

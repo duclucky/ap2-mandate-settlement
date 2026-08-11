@@ -1,0 +1,17 @@
+{
+  "network": "studionet",
+  "sourceCommit": "9ce0a67c2d57b886f7978949dfdace851af074fe",
+  "contractAddress": "0xf95Dd8ff9849016A6d6EED976343b3d0FDD202AD",
+  "operation": "demo",
+  "blockedAt": "2026-08-11T19:12:19.6256001Z",
+  "error": "Rate limit exceeded: 500 requests per hour",
+  "finalizedBeforeLimit": {
+    "openMandate": "0xd76dd8092fe8899c0c322f3a728498d5007eb5e4816a1ae58d1e67c629f28017",
+    "acceptMandate": "0xc4ace6d229f7693fdfc26144b197589cd9aa33589d256f1e634cc85c858df101",
+    "openDispute": "0x9908c1168b8043400b37028b831e4ec8328610e95ce576fa4f9d8c6caff5bb1f"
+  },
+  "pendingFinality": {
+    "adjudicateDispute": "0x687ebe73adc7810538614344fe9656254ec879bdfb234cb2ac000a5f4a4dc726"
+  },
+  "notes": "Do not claim finalized settlement until adjudicate_dispute finality and canonical reads are captured."
+}

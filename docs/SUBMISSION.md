@@ -15,13 +15,13 @@ https://github.com/duclucky/ap2-mandate-settlement
 ## Primary Contract
 
 - Network: studionet
-- v2 address: pending redeploy after evidence-authenticity remediation
+- v2 address: `0xf95Dd8ff9849016A6d6EED976343b3d0FDD202AD`
 - v1 address, not resubmission-ready: `0xb5b7e9bb4f72F756E98ee3ecA4B121F15262D5F1`
-- v2 source commit: pending
+- v2 source commit: `9ce0a67c2d57b886f7978949dfdace851af074fe`
 
 ## Evidence
 
-- v2 lifecycle evidence: pending redeploy
+- v2 lifecycle evidence: partial; deploy, `open_mandate`, `accept_mandate`, and `open_dispute` finalized; `adjudicate_dispute` submitted but finality/canonical settlement reads are pending after default Studionet RPC rate limit.
 - Public signed dispute envelope: `docs/evidence/public-fixtures/ap2-violation.json`
 - Superseded diagnostic archive: `docs/evidence/studionet/archive/`
 - v2 CI: pending
@@ -41,5 +41,5 @@ AP2 Mandate Settlement Bond is a reusable GenLayer Intelligent Contract for agen
 
 - No frontend or browser-wallet evidence by design.
 - Full AP2 SD-JWT/JWS verification remains a future milestone; v2 verifies issuer-signed Ed25519 evidence envelopes before facts can drive settlement.
-- v2 Studionet deployment, lifecycle evidence, CI URL, and source commit are pending.
+- v2 Studionet deployment and source commit are available; final adjudication receipt, canonical settlement reads, and CI URL are pending.
 - Portal submission is not submitted yet; final Submit still requires explicit action-time authorization.
