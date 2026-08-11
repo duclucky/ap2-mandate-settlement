@@ -1,33 +1,7 @@
 {
-  "ap2_version": "v0.2",
-  "checkout": {
-    "merchant": {
-      "website": "https://demo-merchant.example"
-    },
-    "line_items": [
-      {
-        "product": {
-          "id": "supershoe_limited_edition_gold_sneaker_womens_9_0",
-          "title": "SuperShoe Limited Edition Gold"
-        },
-        "quantity": 1
-      }
-    ],
-    "total_price": 10000,
-    "currency": "USD"
-  },
-  "payment": {
-    "payee": {
-      "website": "https://demo-merchant.example"
-    },
-    "payment_amount": {
-      "amount": 10000,
-      "currency": "USD"
-    },
-    "transaction_id": "checkout-hash-1"
-  },
-  "receipts": {
-    "checkout_reference": "checkout-hash-1",
-    "payment_reference": "payment-hash-1"
-  }
+  "issuer_id": "ap2-demo-issuer",
+  "issuer_public_key": "43046bfe4092b3e94994eada15dcc20d8aaa07b658fd3954eb8e0efb8bdca5de",
+  "signature": "52ee19137785bdba7bd11fe337f2ed26eb692edf87101ae9cbb7af4dd92d8f89cf3c7c80d8837e44650ee9ff351f43314f80b314aea8794480678c3aa297c908",
+  "signature_alg": "ED25519",
+  "signed_payload": "{\"ap2_spec_hash\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"ap2_version\":\"v0.2\",\"checkout\":{\"currency\":\"USD\",\"line_items\":[{\"product\":{\"id\":\"supershoe_limited_edition_gold_sneaker_womens_9_0\",\"title\":\"SuperShoe Limited Edition Gold\"},\"quantity\":1}],\"merchant\":{\"website\":\"https://demo-merchant.example\"},\"total_price\":10000},\"mandate_id\":\"ap2-001\",\"payment\":{\"payee\":{\"website\":\"https://demo-merchant.example\"},\"payment_amount\":{\"amount\":10000,\"currency\":\"USD\"},\"transaction_id\":\"checkout-hash-1\"},\"receipts\":{\"checkout_reference\":\"checkout-hash-1\",\"payment_reference\":\"payment-hash-1\"},\"transaction_date\":\"2026-06-01\"}"
 }

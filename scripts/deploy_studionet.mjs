@@ -22,6 +22,9 @@ const CONTRACT_PATH = path.resolve("contracts", "ap2_mandate_settlement.py");
 const EVIDENCE_PATH = path.resolve("docs", "evidence", "studionet", "deployment.json");
 const PUBLIC_FIXTURE_PATH = "docs/evidence/public-fixtures/ap2-violation.json";
 const AP2_SPEC_URL = "https://raw.githubusercontent.com/google-agentic-commerce/AP2/main/docs/ap2/specification.md";
+const AP2_SPEC_HASH = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+const AUTHORIZED_ISSUER_ID = "ap2-demo-issuer";
+const AUTHORIZED_ISSUER_PUBLIC_KEY = "43046bfe4092b3e94994eada15dcc20d8aaa07b658fd3954eb8e0efb8bdca5de";
 const EXPLORER_URL = "https://explorer-studio.genlayer.com";
 const DEFAULT_RPC_URL = studionet.rpcUrls.default.http[0];
 const MANDATE_ID = "ap2-001";
@@ -417,10 +420,6 @@ async function fetchText(url) {
   return response.text();
 }
 
-async function sourceHash(url) {
-  return crypto.createHash("sha256").update(await fetchText(url), "utf8").digest("hex");
-}
-
 async function disputeEvidenceUrl(commit) {
   if (process.env.AP2_EVIDENCE_URL?.trim()) return process.env.AP2_EVIDENCE_URL.trim();
   const inferred = inferRawGithubUrl(getRemoteUrl(), commit);
@@ -502,7 +501,7 @@ async function runDemo() {
     transactions[name] = pending;
     writeEvidence({ ...evidence, transactions });
   };
-  const ap2SpecHash = await sourceHash(AP2_SPEC_URL);
+  const ap2SpecHash = AP2_SPEC_HASH;
   const evidenceUrl = await disputeEvidenceUrl(commit);
   const evidenceBody = await fetchText(evidenceUrl);
   const evidenceDigest = crypto.createHash("sha256").update(evidenceBody, "utf8").digest("hex");
@@ -522,6 +521,8 @@ async function runDemo() {
       "2026-12-31",
       AP2_SPEC_URL,
       ap2SpecHash,
+      AUTHORIZED_ISSUER_ID,
+      AUTHORIZED_ISSUER_PUBLIC_KEY,
       DISPUTE_BOND_WEI,
     ],
     ESCROW_WEI,
@@ -591,6 +592,10 @@ async function runDemo() {
     disputeEvidence: {
       url: evidenceUrl,
       sha256: evidenceDigest,
+      ap2SpecUrl: AP2_SPEC_URL,
+      ap2SpecHash,
+      authorizedIssuerId: AUTHORIZED_ISSUER_ID,
+      authorizedIssuerPublicKey: AUTHORIZED_ISSUER_PUBLIC_KEY,
     },
     transactions,
     canonicalReads,

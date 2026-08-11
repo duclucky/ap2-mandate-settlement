@@ -1,5 +1,6 @@
 import pytest
 
+from tests.direct.ed25519_fixtures import ISSUER_ID, ISSUER_PUBLIC_KEY
 from tests.direct.conftest import to_hex
 
 
@@ -25,6 +26,8 @@ def open_valid_mandate(contract, vm, user, merchant, mandate_id="ap2-001"):
         "2026-12-31",
         AP2_SPEC_URL,
         AP2_SPEC_HASH,
+        ISSUER_ID,
+        ISSUER_PUBLIC_KEY,
         DISPUTE_BOND,
     )
     contract_address = vm._contract_address
@@ -50,6 +53,8 @@ def test_open_and_accept_mandate(direct_vm, direct_deploy, direct_alice, direct_
     assert mandate.merchant.as_hex == to_hex(direct_bob)
     assert mandate.allowed_merchant_domain == "demo-merchant.example"
     assert mandate.required_item_id == "supershoe_limited_edition_gold_sneaker_womens_9_0"
+    assert mandate.authorized_issuer_id == ISSUER_ID
+    assert mandate.authorized_issuer_public_key == ISSUER_PUBLIC_KEY
     assert int(mandate.escrow_remaining) == ESCROW
     assert int(accounting["locked_escrow"]) == ESCROW
 
@@ -96,24 +101,28 @@ def test_invalid_mandate_id_is_rejected(mandate_id, direct_vm, direct_deploy, di
             "2026-12-31",
             AP2_SPEC_URL,
             AP2_SPEC_HASH,
+            ISSUER_ID,
+            ISSUER_PUBLIC_KEY,
             DISPUTE_BOND,
         )
 
 
 @pytest.mark.parametrize(
-    ("merchant", "domain", "item", "amount", "currency", "start", "end", "spec_url", "spec_hash", "bond", "value", "message"),
+    ("merchant", "domain", "item", "amount", "currency", "start", "end", "spec_url", "spec_hash", "issuer_id", "issuer_key", "bond", "value", "message"),
     [
-        (ZERO_ADDRESS, "demo-merchant.example", "sku-1", ESCROW, "USD", "2026-01-01", "2026-12-31", AP2_SPEC_URL, AP2_SPEC_HASH, DISPUTE_BOND, ESCROW, "Merchant cannot be zero address"),
-        ("MERCHANT", "", "sku-1", ESCROW, "USD", "2026-01-01", "2026-12-31", AP2_SPEC_URL, AP2_SPEC_HASH, DISPUTE_BOND, ESCROW, "Merchant domain"),
-        ("MERCHANT", "demo-merchant.example", "", ESCROW, "USD", "2026-01-01", "2026-12-31", AP2_SPEC_URL, AP2_SPEC_HASH, DISPUTE_BOND, ESCROW, "Item ID"),
-        ("MERCHANT", "demo-merchant.example", "sku-1", 0, "USD", "2026-01-01", "2026-12-31", AP2_SPEC_URL, AP2_SPEC_HASH, DISPUTE_BOND, ESCROW, "Amount must be positive"),
-        ("MERCHANT", "demo-merchant.example", "sku-1", ESCROW, "US", "2026-01-01", "2026-12-31", AP2_SPEC_URL, AP2_SPEC_HASH, DISPUTE_BOND, ESCROW, "Currency"),
-        ("MERCHANT", "demo-merchant.example", "sku-1", ESCROW, "USD", "2026-1-01", "2026-12-31", AP2_SPEC_URL, AP2_SPEC_HASH, DISPUTE_BOND, ESCROW, "Date"),
-        ("MERCHANT", "demo-merchant.example", "sku-1", ESCROW, "USD", "2027-01-01", "2026-12-31", AP2_SPEC_URL, AP2_SPEC_HASH, DISPUTE_BOND, ESCROW, "Expiry"),
-        ("MERCHANT", "demo-merchant.example", "sku-1", ESCROW, "USD", "2026-01-01", "2026-12-31", "https://example.com/spec", AP2_SPEC_HASH, DISPUTE_BOND, ESCROW, "AP2 spec URL"),
-        ("MERCHANT", "demo-merchant.example", "sku-1", ESCROW, "USD", "2026-01-01", "2026-12-31", AP2_SPEC_URL, "bad", DISPUTE_BOND, ESCROW, "AP2 spec hash"),
-        ("MERCHANT", "demo-merchant.example", "sku-1", ESCROW, "USD", "2026-01-01", "2026-12-31", AP2_SPEC_URL, AP2_SPEC_HASH, 0, ESCROW, "Dispute bond"),
-        ("MERCHANT", "demo-merchant.example", "sku-1", ESCROW, "USD", "2026-01-01", "2026-12-31", AP2_SPEC_URL, AP2_SPEC_HASH, DISPUTE_BOND, ESCROW - 1, "Escrow value"),
+        (ZERO_ADDRESS, "demo-merchant.example", "sku-1", ESCROW, "USD", "2026-01-01", "2026-12-31", AP2_SPEC_URL, AP2_SPEC_HASH, ISSUER_ID, ISSUER_PUBLIC_KEY, DISPUTE_BOND, ESCROW, "Merchant cannot be zero address"),
+        ("MERCHANT", "", "sku-1", ESCROW, "USD", "2026-01-01", "2026-12-31", AP2_SPEC_URL, AP2_SPEC_HASH, ISSUER_ID, ISSUER_PUBLIC_KEY, DISPUTE_BOND, ESCROW, "Merchant domain"),
+        ("MERCHANT", "demo-merchant.example", "", ESCROW, "USD", "2026-01-01", "2026-12-31", AP2_SPEC_URL, AP2_SPEC_HASH, ISSUER_ID, ISSUER_PUBLIC_KEY, DISPUTE_BOND, ESCROW, "Item ID"),
+        ("MERCHANT", "demo-merchant.example", "sku-1", 0, "USD", "2026-01-01", "2026-12-31", AP2_SPEC_URL, AP2_SPEC_HASH, ISSUER_ID, ISSUER_PUBLIC_KEY, DISPUTE_BOND, ESCROW, "Amount must be positive"),
+        ("MERCHANT", "demo-merchant.example", "sku-1", ESCROW, "US", "2026-01-01", "2026-12-31", AP2_SPEC_URL, AP2_SPEC_HASH, ISSUER_ID, ISSUER_PUBLIC_KEY, DISPUTE_BOND, ESCROW, "Currency"),
+        ("MERCHANT", "demo-merchant.example", "sku-1", ESCROW, "USD", "2026-1-01", "2026-12-31", AP2_SPEC_URL, AP2_SPEC_HASH, ISSUER_ID, ISSUER_PUBLIC_KEY, DISPUTE_BOND, ESCROW, "Date"),
+        ("MERCHANT", "demo-merchant.example", "sku-1", ESCROW, "USD", "2027-01-01", "2026-12-31", AP2_SPEC_URL, AP2_SPEC_HASH, ISSUER_ID, ISSUER_PUBLIC_KEY, DISPUTE_BOND, ESCROW, "Expiry"),
+        ("MERCHANT", "demo-merchant.example", "sku-1", ESCROW, "USD", "2026-01-01", "2026-12-31", "https://example.com/spec", AP2_SPEC_HASH, ISSUER_ID, ISSUER_PUBLIC_KEY, DISPUTE_BOND, ESCROW, "AP2 spec URL"),
+        ("MERCHANT", "demo-merchant.example", "sku-1", ESCROW, "USD", "2026-01-01", "2026-12-31", AP2_SPEC_URL, "bad", ISSUER_ID, ISSUER_PUBLIC_KEY, DISPUTE_BOND, ESCROW, "AP2 spec hash"),
+        ("MERCHANT", "demo-merchant.example", "sku-1", ESCROW, "USD", "2026-01-01", "2026-12-31", AP2_SPEC_URL, AP2_SPEC_HASH, "", ISSUER_PUBLIC_KEY, DISPUTE_BOND, ESCROW, "Issuer ID"),
+        ("MERCHANT", "demo-merchant.example", "sku-1", ESCROW, "USD", "2026-01-01", "2026-12-31", AP2_SPEC_URL, AP2_SPEC_HASH, ISSUER_ID, "bad", DISPUTE_BOND, ESCROW, "Issuer public key"),
+        ("MERCHANT", "demo-merchant.example", "sku-1", ESCROW, "USD", "2026-01-01", "2026-12-31", AP2_SPEC_URL, AP2_SPEC_HASH, ISSUER_ID, ISSUER_PUBLIC_KEY, 0, ESCROW, "Dispute bond"),
+        ("MERCHANT", "demo-merchant.example", "sku-1", ESCROW, "USD", "2026-01-01", "2026-12-31", AP2_SPEC_URL, AP2_SPEC_HASH, ISSUER_ID, ISSUER_PUBLIC_KEY, DISPUTE_BOND, ESCROW - 1, "Escrow value"),
     ],
 )
 def test_mandate_guards(
@@ -126,6 +135,8 @@ def test_mandate_guards(
     end,
     spec_url,
     spec_hash,
+    issuer_id,
+    issuer_key,
     bond,
     value,
     message,
@@ -150,6 +161,8 @@ def test_mandate_guards(
             end,
             spec_url,
             spec_hash,
+            issuer_id,
+            issuer_key,
             bond,
         )
 
@@ -172,5 +185,7 @@ def test_duplicate_mandate_id_is_rejected(direct_vm, direct_deploy, direct_alice
             "2026-12-31",
             AP2_SPEC_URL,
             AP2_SPEC_HASH,
+            ISSUER_ID,
+            ISSUER_PUBLIC_KEY,
             DISPUTE_BOND,
         )

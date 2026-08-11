@@ -1,33 +1,7 @@
 {
-  "ap2_version": "v0.2",
-  "checkout": {
-    "merchant": {
-      "website": "https://evil.example"
-    },
-    "line_items": [
-      {
-        "product": {
-          "id": "wrong_sku",
-          "title": "Wrong item"
-        },
-        "quantity": 1
-      }
-    ],
-    "total_price": 12000,
-    "currency": "USD"
-  },
-  "payment": {
-    "payee": {
-      "website": "https://evil.example"
-    },
-    "payment_amount": {
-      "amount": 12000,
-      "currency": "USD"
-    },
-    "transaction_id": "wrong-checkout"
-  },
-  "receipts": {
-    "checkout_reference": "checkout-hash-1",
-    "payment_reference": "payment-hash-1"
-  }
+  "issuer_id": "ap2-demo-issuer",
+  "issuer_public_key": "43046bfe4092b3e94994eada15dcc20d8aaa07b658fd3954eb8e0efb8bdca5de",
+  "signature": "54abea965390638ddca9fa081a7035accda7960d705d4bd293bd77b88acffe1b8616fcec156a295cbfbc134d11435207e70f58de19948c881282720735434c0b",
+  "signature_alg": "ED25519",
+  "signed_payload": "{\"ap2_spec_hash\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"ap2_version\":\"v0.2\",\"checkout\":{\"currency\":\"USD\",\"line_items\":[{\"product\":{\"id\":\"wrong_sku\",\"title\":\"Wrong item\"},\"quantity\":1}],\"merchant\":{\"website\":\"https://evil.example\"},\"total_price\":12000},\"mandate_id\":\"ap2-001\",\"payment\":{\"payee\":{\"website\":\"https://evil.example\"},\"payment_amount\":{\"amount\":12000,\"currency\":\"USD\"},\"transaction_id\":\"wrong-checkout\"},\"receipts\":{\"checkout_reference\":\"checkout-hash-1\",\"payment_reference\":\"payment-hash-1\"},\"transaction_date\":\"2026-06-01\"}"
 }

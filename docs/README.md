@@ -6,7 +6,7 @@
 - Project name: AP2 Mandate Settlement Bond
 - Project slug: `ap2-mandate-settlement`
 - Category: Intelligent Contracts
-- Status: DEPLOYED_STUDIONET_LIFECYCLE_VERIFIED
+- Status: EVIDENCE_AUTHENTICITY_REMEDIATED_LOCAL
 - Repository: `https://github.com/duclucky/ap2-mandate-settlement`
 - Target network: studionet
 
@@ -24,7 +24,7 @@ Settle agentic-payment disputes by paying the merchant only when AP2 evidence me
 
 - Trust problem: neutral adjudication of AP2 mandate conformance before value moves.
 - Actors/adversary: user wants refunds for mismatches; merchant wants release for authorized checkouts; agent can be prompt-injected or faulty.
-- Evidence class: commit-pinned public AP2 dispute bundle plus official AP2 source/version constraints.
+- Evidence class + authenticity mechanism: commit-pinned public AP2 dispute envelope plus deterministic Ed25519 verification of issuer-signed checkout/payment/receipt payloads.
 - Consensus question: whether the closed checkout/payment meaning conforms to locked merchant, item, amount, currency, reference, and receipt linkage constraints.
 - State machine: `DRAFT -> ACTIVE -> DISPUTE_OPEN -> RELEASED | REFUNDED`, with `UNVERIFIABLE` returning to `ACTIVE`.
 - Direct consequence: release escrow to merchant, refund user, or refund only the dispute bond.
@@ -36,7 +36,8 @@ Settle agentic-payment disputes by paying the merchant only when AP2 evidence me
 | --- | --- | --- |
 | Replacement | PASS | Replacing GenLayer with a backend preserves storage but loses neutral validator judgment before escrow settlement. |
 | Judgment | PASS | Validators independently inspect AP2 evidence and decide semantic conformance; client cannot submit a verdict. |
-| Evidence | PASS | AP2 spec and GitHub are public; dispute bundles are bounded, commit-pinned, and SHA-256 checked. |
+| Evidence availability | PASS | AP2 spec and GitHub are public; dispute envelopes are bounded, commit-pinned, and SHA-256 checked. |
+| Evidence authenticity | PASS - local remediation | Checkout/payment/receipt facts can drive settlement only after deterministic Ed25519 verification against the issuer id/key locked in the mandate. |
 | Equivalence | PASS | Consensus-critical fields are verdict, source stage, mismatch classes, critical field IDs, and consequence class. |
 | Consequence | PASS | Final verdict releases escrow, refunds escrow, or leaves escrow active. |
 | Adversarial | PASS | User and merchant have opposed incentives over the same payment. |
@@ -63,14 +64,15 @@ Settle agentic-payment disputes by paying the merchant only when AP2 evidence me
 
 - One standalone Intelligent Contract.
 - Native GEN escrow and dispute bond accounting.
-- Public commit-pinned AP2 evidence bundles.
+- Public commit-pinned AP2 evidence envelopes.
+- Deterministic Ed25519 verification of issuer-signed AP2 evidence payloads.
 - Semantic AP2 conformance judgment.
 - Direct tests and Studionet script lifecycle evidence.
 
 ### Out Of Scope
 
 - No frontend, no Vercel, no browser wallet claims.
-- No full SD-JWT cryptographic library implementation in GenVM.
+- No full SD-JWT cryptographic library implementation in GenVM; v2 verifies an Ed25519 issuer-signed AP2 evidence envelope as the settlement trust anchor.
 - No legal chargeback replacement or card-network integration.
 - No private evidence or credentialed APIs.
 
@@ -84,12 +86,12 @@ Not selected. This is an Intelligent Contracts submission and has no frontend.
 
 - `mandate_id`: 6-64 lowercase letters, digits, `-`, `_`.
 - `dispute_id`: derived as `mandate_id + ":" + attempt`.
-- `source_digest`: lowercase 64-character SHA-256 hex of the evidence bundle.
+- `source_digest`: lowercase 64-character SHA-256 hex of the signed evidence envelope.
 - `source_url`: `https://raw.githubusercontent.com/<org>/<repo>/<40-hex-commit>/<path>.json`.
 
 ### Structured Storage
 
-- `Mandate`: user, merchant, allowed merchant domain, required item id, amount, currency, AP2 spec URL/hash, escrow, status, active dispute id, close proposer.
+- `Mandate`: user, merchant, allowed merchant domain, required item id, amount, currency, AP2 spec URL/hash, authorized issuer id/public key, escrow, status, active dispute id, close proposer.
 - `Dispute`: mandate id, claimant, evidence URL/digest, status, verdict, source stage, consequence, mismatch classes, critical fields, rationale, settled flag.
 - `credits`: str-keyed credit ledger by address.
 - `attempt_counts`: append-only dispute attempt count by mandate.
@@ -133,11 +135,11 @@ ACTIVE --bilateral_close/user_then_merchant_or_reverse--> CLOSED
 
 ## Evidence Policy
 
-- Authoritative sources: AP2 specification, AP2 GitHub repository, and commit-pinned dispute bundle.
-- Provenance/authentication: claimant must be one mandate party; source URL is pinned to a 40-hex Git commit; source digest is locked onchain and checked after fetch.
-- Authorized attestor/signer: mandate parties are authorized dispute openers; cryptographic AP2 signatures are represented inside the evidence and semantically judged, not accepted as a consequence trigger by themselves.
-- Anti-replay event/digest identity: `mandate_id + attempt + source_digest`.
-- Signed timestamp bounds: contract locks AP2 version date strings and mandate activation/expiry windows.
+- Authoritative sources: AP2 specification, AP2 GitHub repository, and the authorized issuer public key locked in each mandate.
+- Provenance/authentication: claimant must be one mandate party; source URL is pinned to a 40-hex Git commit; source digest is locked onchain and checked after fetch; checkout/payment/receipt facts are used only after Ed25519 verification of the `signed_payload`.
+- Authorized attestor/signer: `authorized_issuer_id` and `authorized_issuer_public_key` are locked in `open_mandate`; any mismatch or invalid signature is non-penalizing.
+- Anti-replay event/digest identity: signed payload must bind `mandate_id`, `ap2_spec_hash`, and `transaction_date`; attempts remain append-only as `mandate_id + attempt`.
+- Signed timestamp bounds: signed payload `transaction_date` must be within mandate activation/expiry windows.
 - Immutable policy/source version URLs and hashes: `ap2_spec_url` and `ap2_spec_hash` are stored in each mandate.
 - Allowed schemes/domains/paths: `https://raw.githubusercontent.com/.../<40-hex-commit>/...json` for dispute bundles; `https://ap2-protocol.org/...` or `https://raw.githubusercontent.com/google-agentic-commerce/AP2/...` for AP2 spec URL metadata.
 - Time/window rules: activation date must be before expiry date; evidence `transaction_date` is judged against the locked mandate window.
@@ -153,9 +155,10 @@ ACTIVE --bilateral_close/user_then_merchant_or_reverse--> CLOSED
 
 ### Leader Task
 
-- Inputs: mandate terms, evidence URL/digest, AP2 spec URL/hash, dispute ID.
-- Fetch: web GET evidence bundle URL; reject non-200, digest mismatch, oversize, non-JSON.
-- Extraction: parse public bundle text and ask LLM to classify AP2 conformance.
+- Inputs: mandate terms, evidence URL/digest, AP2 spec URL/hash, authorized issuer id/key, dispute ID.
+- Fetch: web GET evidence envelope URL; reject non-200, digest mismatch, oversize, non-JSON.
+- Authentication: verify envelope `signature_alg=ED25519`, issuer id/key match the mandate, signature validates over the exact `signed_payload`, and payload binds mandate id, AP2 spec hash, and transaction date.
+- Extraction: parse the verified signed payload and ask LLM to classify AP2 conformance.
 - Normalization: contract derives source stage, consequence, field bounds, allowed mismatch classes, and sorted critical field IDs.
 - Structured output: `{verdict, source_stage, mismatch_classes, critical_fields, consequence_class, rationale}`.
 
@@ -198,7 +201,7 @@ Rationale is capped and stored for explanation only. It is not consensus-critica
 
 ### Write Methods
 
-- `open_mandate(mandate_id, merchant_address, allowed_merchant_domain, required_item_id, amount, currency, activation_date, expiry_date, ap2_spec_url, ap2_spec_hash, dispute_bond_amount)`
+- `open_mandate(mandate_id, merchant_address, allowed_merchant_domain, required_item_id, amount, currency, activation_date, expiry_date, ap2_spec_url, ap2_spec_hash, authorized_issuer_id, authorized_issuer_public_key, dispute_bond_amount)`
 - `accept_mandate(mandate_id)`
 - `open_dispute(mandate_id, evidence_url, evidence_digest)`
 - `close_dispute(mandate_id)`
@@ -228,6 +231,9 @@ Rationale is capped and stored for explanation only. It is not consensus-critica
 | Threat | Attack | Mitigation | Test |
 | --- | --- | --- | --- |
 | Fake source URL | Claimant points to mutable/private evidence | Commit-pinned raw GitHub URL and digest check | invalid URL/hash tests |
+| Fabricated hash-valid facts | Mandate party publishes false JSON with a matching digest | Missing/invalid issuer signature -> `UNVERIFIABLE` | unsigned fabricated evidence test |
+| Forged issuer signature | Mandate party changes signed payload or signature | Ed25519 verification -> `AUTH_FAILED`/`UNVERIFIABLE` | forged signature test |
+| Replay/version mismatch | Valid signature is reused for a different mandate, AP2 version hash, or time window | Signed payload binding checks -> `UNVERIFIABLE` | wrong mandate/spec/timestamp tests |
 | Prompt injection | Bundle says to ignore policy and pay attacker | Locked enums and normalizer discard unknown actions | prompt injection test |
 | Format-only validation | Leader emits valid JSON with wrong verdict | Validator fingerprint compares meaning fields | malicious leader test |
 | Double settlement | Same dispute adjudicated twice | `settled` flag and terminal mandate status | duplicate adjudication test |
@@ -240,7 +246,7 @@ Rationale is capped and stored for explanation only. It is not consensus-critica
 - Happy path: open, accept, authorized settlement, merchant withdrawal.
 - Unauthorized: non-merchant accept, stranger dispute, wrong withdrawal.
 - Isolation: two mandates retain independent state.
-- Evidence failure: bad URL, unavailable source, digest mismatch, malformed JSON.
+- Evidence failure: bad URL, unavailable source, digest mismatch, malformed JSON, unsigned fabricated JSON, forged signature, wrong mandate/spec binding, stale/future timestamp.
 - Malicious leader: valid shape with wrong meaning fails validator replay.
 - Prompt injection: unknown verdict/action/facts cannot expand consequence.
 - Semantic mismatch: item, merchant, amount, currency, reference, receipt linkage.
@@ -257,7 +263,8 @@ Rationale is capped and stored for explanation only. It is not consensus-critica
 | --- | --- | --- | --- | --- |
 | User locks AP2 payment escrow | `open_mandate`, `Mandate.escrow_remaining` | `get_mandate`, `get_accounting` | `test_open_and_accept_mandate` | Studionet open tx + canonical read |
 | Merchant must accept before disputes | `accept_mandate`, `status=ACTIVE` | `get_status` | `test_only_merchant_accepts` | Studionet accept tx |
-| Evidence must be public and pinned | `open_dispute`, URL/digest guards | `get_dispute` | `test_dispute_guards_and_one_active_dispute` | Evidence bundle URL + hash |
+| Evidence must be public and pinned | `open_dispute`, URL/digest guards | `get_dispute` | `test_dispute_guards_and_one_active_dispute` | Evidence envelope URL + hash |
+| Evidence facts must be issuer-signed | `adjudicate_dispute`, Ed25519 verification | `get_dispute` | `test_fabricated_hash_valid_unsigned_evidence_is_unverifiable`, `test_forged_signature_is_unverifiable` | Local remediation; Studionet redeploy pending |
 | Validators judge AP2 meaning | `adjudicate_dispute`, validator fingerprint | `get_dispute` | `test_malicious_leader_with_valid_shape_fails_semantic_replay` | Finalized adjudication tx |
 | Authorized AP2 evidence pays merchant | `AUTHORIZED -> RELEASED`, merchant credit | `get_credit`, `get_status` | `test_authorized_verdict_releases_to_merchant` | Canonical credit and withdrawal evidence |
 | Violating AP2 evidence refunds user | `VIOLATION -> REFUNDED`, user credit | `get_credit`, `get_status` | `test_violation_verdict_refunds_user` | Canonical refund evidence |
@@ -277,11 +284,11 @@ Rationale is capped and stored for explanation only. It is not consensus-critica
 ## Deployment And Evidence Plan
 
 - Network: studionet.
-- Active contract: `0xb5b7e9bb4f72F756E98ee3ecA4B121F15262D5F1`.
-- Source commit: `56a8c571c68602325952096cfef439ed22a60f98`.
+- Last v1 Studionet contract: `0xb5b7e9bb4f72F756E98ee3ecA4B121F15262D5F1`.
+- v2 source commit: pending after authenticity remediation.
 - Actors/wallet separation: user and merchant as separate public addresses; if a second EOA is required, ask before creating/funding it.
 - Deploy steps: local check, deploy contract, verify `Result: SUCCESS`, save address/tx/source commit.
-- Consequential lifecycle: open mandate with GEN escrow, accept, open dispute with bond, adjudicate `VIOLATION` or `AUTHORIZED`, withdraw credit.
+- Consequential lifecycle: open mandate with GEN escrow and locked issuer id/key, accept, open dispute with signed evidence envelope and bond, adjudicate `VIOLATION` or `AUTHORIZED`, withdraw credit.
 - Canonical reads: mandate, dispute, accounting, credits before and after withdrawal.
 - Balance/receipt proof: safe allowlist only: tx hash, status/result, address, value, public actor addresses, balance delta.
 - Public dispute fixture path: `docs/evidence/public-fixtures/ap2-violation.json`, served through a raw GitHub URL pinned to the source commit.
@@ -309,7 +316,7 @@ Not selected.
 
 - No frontend or browser-wallet evidence by design.
 - No legal/card-network claim.
-- No full SD-JWT cryptographic verification library in GenVM; evidence authenticity for contract consequences is bounded by mandate-party authorization, commit-pinned source URL, and SHA-256 digest, while AP2 signature semantics are part of validator judgment.
+- Full AP2 SD-JWT/JWS verification remains a future milestone. This remediation implements deterministic Ed25519 verification of issuer-signed AP2 evidence envelopes before checkout/payment/receipt facts can drive settlement.
 - Portal submission remains pending until explicit action-time authorization.
 
 ## Kill Criteria
