@@ -10,8 +10,10 @@
     "acceptMandate": "0xc4ace6d229f7693fdfc26144b197589cd9aa33589d256f1e634cc85c858df101",
     "openDispute": "0x9908c1168b8043400b37028b831e4ec8328610e95ce576fa4f9d8c6caff5bb1f"
   },
-  "pendingFinality": {
+  "resolvedFinality": {
     "adjudicateDispute": "0x687ebe73adc7810538614344fe9656254ec879bdfb234cb2ac000a5f4a4dc726"
   },
-  "notes": "Do not claim finalized settlement until adjudicate_dispute finality and canonical reads are captured."
+  "resolvedAt": "2026-08-12T01:06:07.999Z",
+  "resolution": "adjudicate_dispute and withdraw_credit later finalized; canonical settlement reads captured in deployment.json.",
+  "notes": "Historical rate-limit interruption only; not an active lifecycle blocker."
 }

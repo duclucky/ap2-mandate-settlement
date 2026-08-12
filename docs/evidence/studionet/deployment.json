@@ -30,17 +30,75 @@
     },
     "adjudicateDispute": {
       "transactionHash": "0x687ebe73adc7810538614344fe9656254ec879bdfb234cb2ac000a5f4a4dc726",
-      "status": "SUBMITTED",
-      "submittedAt": "2026-08-11T19:09:22.667Z"
+      "status": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN",
+      "finalizedAt": "2026-08-12T01:05:27.761Z"
+    },
+    "withdrawUserCredit": {
+      "transactionHash": "0x8df28f8d0c10f40fa51f29dde0b2e648ea59d770b23eab248cd2303b709e1d87",
+      "status": "FINALIZED",
+      "execution": "FINISHED_WITH_RETURN",
+      "finalizedAt": "2026-08-12T01:06:07.999Z"
     }
   },
   "canonicalReads": {
-    "explorerAddress": "https://explorer-studio.genlayer.com/address/0xf95Dd8ff9849016A6d6EED976343b3d0FDD202AD"
+    "explorerAddress": "https://explorer-studio.genlayer.com/address/0xf95Dd8ff9849016A6d6EED976343b3d0FDD202AD",
+    "status": "REFUNDED",
+    "mandate": {
+      "accepted": true,
+      "activation_date": "2026-01-01",
+      "active_dispute_id": "ap2-001:1",
+      "allowed_merchant_domain": "demo-merchant.example",
+      "amount": "10000000000000000",
+      "ap2_spec_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "ap2_spec_url": "https://raw.githubusercontent.com/google-agentic-commerce/AP2/main/docs/ap2/specification.md",
+      "authorized_issuer_id": "ap2-demo-issuer",
+      "authorized_issuer_public_key": "43046bfe4092b3e94994eada15dcc20d8aaa07b658fd3954eb8e0efb8bdca5de",
+      "close_proposed_by": "0x0000000000000000000000000000000000000000",
+      "currency": "USD",
+      "dispute_bond_amount": 1000000000000000,
+      "escrow_remaining": 0,
+      "expiry_date": "2026-12-31",
+      "merchant": "0x45ad397c438397a702b53a7499a78d08961d39db",
+      "required_item_id": "supershoe_limited_edition_gold_sneaker_womens_9_0",
+      "status": "REFUNDED",
+      "user": "0xc495ef51618d03267a1f227afe5b27b38c748272"
+    },
+    "dispute": {
+      "claimant": "0xc495ef51618d03267a1f227afe5b27b38c748272",
+      "consequence_class": "REFUND_USER",
+      "critical_fields": "ITEM,MERCHANT,PAYMENT_REFERENCE",
+      "evidence_digest": "623ee4a0c33b8eec960cde2ac9f236099ca75bfb09459b9fd653805f32391500",
+      "evidence_url": "https://raw.githubusercontent.com/duclucky/ap2-mandate-settlement/9ce0a67c2d57b886f7978949dfdace851af074fe/docs/evidence/public-fixtures/ap2-violation.json",
+      "mandate_id": "ap2-001",
+      "mismatch_classes": "ITEM_MISMATCH,MERCHANT_MISMATCH,PAYMENT_REFERENCE_MISMATCH",
+      "rationale": "Deterministic AP2 fields conflict with the locked mandate.",
+      "settled": true,
+      "source_stage": "SUFFICIENT",
+      "status": "RESOLVED",
+      "verdict": "VIOLATION"
+    },
+    "userCreditBeforeWithdraw": "11000000000000000",
+    "userCreditAfterWithdraw": 0,
+    "merchantCredit": 0,
+    "accounting": {
+      "locked_dispute_bonds": 0,
+      "locked_escrow": 0,
+      "withdrawable_credits": 0
+    }
   },
   "limits": {
     "noFrontend": true,
     "contractOnlyTrack": true,
     "evidenceIsSanitized": true,
     "parserDoesNotPersistRawReceipts": true
+  },
+  "disputeEvidence": {
+    "url": "https://raw.githubusercontent.com/duclucky/ap2-mandate-settlement/9ce0a67c2d57b886f7978949dfdace851af074fe/docs/evidence/public-fixtures/ap2-violation.json",
+    "sha256": "623ee4a0c33b8eec960cde2ac9f236099ca75bfb09459b9fd653805f32391500",
+    "ap2SpecUrl": "https://raw.githubusercontent.com/google-agentic-commerce/AP2/main/docs/ap2/specification.md",
+    "ap2SpecHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "authorizedIssuerId": "ap2-demo-issuer",
+    "authorizedIssuerPublicKey": "43046bfe4092b3e94994eada15dcc20d8aaa07b658fd3954eb8e0efb8bdca5de"
   }
 }

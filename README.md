@@ -34,7 +34,7 @@ v2 authenticity-remediated contract: `0xf95Dd8ff9849016A6d6EED976343b3d0FDD202AD
 
 v2 source commit: `9ce0a67c2d57b886f7978949dfdace851af074fe`.
 
-Lifecycle demo status: `open_mandate`, `accept_mandate`, and `open_dispute` finalized; `adjudicate_dispute` was submitted but finality/canonical settlement reads are pending because the default Studionet RPC returned `Rate limit exceeded: 500 requests per hour`.
+Lifecycle demo status: `open_mandate`, `accept_mandate`, `open_dispute`, `adjudicate_dispute`, and `withdraw_credit` finalized. Canonical reads show `VIOLATION`, `REFUNDED`, zero locked escrow, zero locked dispute bonds, and zero withdrawable credits after withdrawal.
 
 Previous v1 contract, not resubmission-ready: `0xb5b7e9bb4f72F756E98ee3ecA4B121F15262D5F1`.
 
